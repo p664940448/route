@@ -1,0 +1,4 @@
+1.程序用到selenium组件，需下载驱动。
+2.查看计算机安装的chrome版本（程序需要chrome浏览器）,然后从https://npm.taobao.org/mirrors/chromedriver下载相应的驱动程序chromedriver.exe，把文件放到tools目录下。
+3.运行根目录下的run.exe文件，它会启动5001端口，注意别让其它程序占用这个端口。
+4.外部调用重启浏览器url地址：http://127.0.0.1:5001/restart.

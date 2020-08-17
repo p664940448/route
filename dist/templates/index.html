@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <!-- app样式 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <!-- jquery -->
+    <script src="js/bootstrap/js/jquery.mini.js"></script>
+    <script src="js/app.js"></script>
+    <link href="{{ url_for('static', filename='js/lib2.13.1/index.css') }}" rel="stylesheet" type="text/css">
+    <script src="js/lib2.13.1/vue.js"></script>
+    <script src="js/lib2.13.1/index.js"></script>
+    <title>cails</title>
+    <style type="text/css">
+        .div40{
+           height:50px;line-height:50px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="app_header">
+        <div class="app_title">
+            <div class="app_title_show">路由器
+            </div>
+            <div class="rightButton"></div>
+        </div>
+    </div>
+
+    <div class="app_context" v-loading.fullscreen.lock="loading" style="min-height:700px;">
+        <div style="padding-left:20px; padding-right:20px;">
+            <el-alert title="重启调用接口地址： http://127.0.0.1:5001/restart" type="success"></el-alert>
+            <div class="div40">
+                <span style="width:100px;text-align:right;display:inline-block">路由器url：</span><el-input v-model="routerUrl" placeholder="http://192.168.168.1" style="width:400px;" size="small"></el-input>
+            </div>
+            <div class="div40">
+                <span style="width:100px;text-align:right;display:inline-block">路由器密码：</span><el-input v-model="password" placeholder="输入密码"  style="width:150px;" size="small"></el-input>
+            </div>
+            <div class="div40">
+                <el-button size="small" type="primary" @click="save" :loading="loading_save">保存</el-button>
+                <el-button size="small" type="danger" @click="restart" :loading="loading_restart">重启路由</el-button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+var vue = new Vue({
+    data: {
+        loading: false,
+        routerUrl: "",
+        password: "",
+        loading_save: false,
+        loading_restart: false
+    },
+    el: "#app",
+    methods:{
+        save: function(){
+            var _self = this;
+            var data = {
+                url: _self.routerUrl,
+                password: _self.password
+            };
+            _self.loading_save = true;
+            postData("save",data,_self,function(response){
+                _self.loading_save = false;
+                _self.$message("保存成功")
+            });
+        },
+        restart: function(){
+            var _self = this;
+            _self.loading_restart = true;
+            var data = {
+                url: _self.routerUrl,
+                password: _self.password
+            };
+            postData("restart",data,{},function(response){
+                _self.loading_restart = false;
+                _self.$notify({
+                  title: '提示',
+                  message: response.msg,
+                  duration: 0
+                });
+            });
+        }
+    },
+    created: function(){
+        var _self = this;
+        getData("getCfg", null, _self, function(response){
+            _self.routerUrl = response.url;
+            _self.password = response.password;
+        })
+    }
+});
+
+</script>
