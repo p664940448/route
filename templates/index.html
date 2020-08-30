@@ -29,7 +29,7 @@
 
     <div class="app_context" v-loading.fullscreen.lock="loading" style="min-height:700px;">
         <div style="padding-left:20px; padding-right:20px;">
-            <el-alert title="重启调用接口地址： http://127.0.0.1:5001/restart" type="success"></el-alert>
+            <el-alert title="重启调用接口地址： http://127.0.0.1:5001/restart2" type="success"></el-alert>
             <div class="div40">
                 <span style="width:100px;text-align:right;display:inline-block">路由器url：</span><el-input v-model="routerUrl" placeholder="http://192.168.168.1" style="width:400px;" size="small"></el-input>
             </div>
@@ -94,5 +94,10 @@ var vue = new Vue({
         })
     }
 });
+
+var sleep = function(time) {
+        var startTime = new Date().getTime() + parseInt(time, 10);
+        while(new Date().getTime() < startTime) {}
+};
 
 </script>

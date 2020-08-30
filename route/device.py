@@ -9,6 +9,9 @@ from selenium import webdriver
 from flask import json,jsonify
 from selenium.webdriver.chrome.options import Options
 
+from mail import Mail
+
+
 class Device:
     def __init__(self, routerUrl,password):
         chrome_options =Options()
@@ -46,7 +49,12 @@ class Device:
 
             self.driver.close()
             self.driver.quit()
-            resultDict = {'status': 'success', 'msg': '路由器重启成功，请等到5分钟'}
+            resultDict = {'status': "success", 'msg': "路由器重启成功，请等到5分钟"}
+
+            #等待60秒，然后发邮件
+            time.sleep(60)
+            self.sendEmail()
+
 
         except Exception as e:
             try:
@@ -54,9 +62,15 @@ class Device:
                 self.driver.quit()
             except:
                 print("sss")
-            resultDict = {'status': 'error', 'msg': '路由器重启失败:'}
+            resultDict = {'status': "error", 'msg': "路由器重启失败:"}
 
         return resultDict
+
+    def sendEmail(self):
+        print("发送邮件")
+        mail = Mail("smtp.yeah.net", "chhp1234@yeah.net", "SXDCVVWMKJBUWLMY")
+        mail.sendMail("chhp1234@yeah.net", "路由器地址", "此邮件查看路由器地址")
+
 
 if __name__ == '__main__':
     device = Device("http://114.241.107.229:8001/","bjshansi.com")
